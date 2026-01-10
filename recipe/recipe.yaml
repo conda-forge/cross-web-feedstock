@@ -2,7 +2,7 @@
 schema_version: 1
 
 context:
-  version: "0.4.0"
+  version: "0.4.1"
   python_check_max: "3.14"
 
 recipe:
@@ -11,7 +11,7 @@ recipe:
 
 source:
   url: https://pypi.org/packages/source/c/cross-web/cross_web-${{ version }}.tar.gz
-  sha256: 4ae65619ddfcd06d6803432c0366342d7e8aeba10194b4e144d73a662e75370c
+  sha256: 0466295028dcae98c9ab3d18757f90b0e74fac2ff90efbe87e74657546d9993d
 
 build:
   number: 0
@@ -95,11 +95,7 @@ outputs:
             - python ${{ python_min }}.*
         script:
           env:
-            PYTEST_ADDOPTS:
-              -vv
-              --tb=long
-              --color=yes
-              -k "not (chalice or quart)"
+            PYTEST_ADDOPTS: -vv --tb=long --color=yes -k "not (chalice or quart)"
           content:
             # avoid source path confusion in pyproject.toml
             - python -c "import pathlib; pathlib.Path('.coveragerc').write_text('[run]\nbranch = true')"
