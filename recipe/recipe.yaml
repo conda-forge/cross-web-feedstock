@@ -25,17 +25,17 @@ outputs:
         - ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation --disable-pip-version-check
     requirements:
       host:
-        - python ${{ python_min }}.*
         - hatchling
         - pip
+        - python ${{ python_min }}.*
       run:
         - python >=${{ python_min }}
         - typing_extensions >=4.14.0
       run_constraints:
         # [integrations]
         - aiohttp >=3.9
-        - django >=4.2
         - chalice >=1.29
+        - django >=4.2
         - fastapi >=0.115.12
         - flask >=2.3
         - httpx >=0.28.1
@@ -89,9 +89,11 @@ outputs:
             - tests/
         requirements:
           run:
+            - inline-snapshot >=0.20.10
             - pytest >=7.4.4
             - pytest-asyncio >=0.23.8
             - pytest-cov >=6.0.0
+            - pytest-django >=4.11.0
             - python ${{ python_min }}.*
         script:
           env:
