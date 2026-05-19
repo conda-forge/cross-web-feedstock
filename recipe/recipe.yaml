@@ -2,7 +2,7 @@
 schema_version: 1
 
 context:
-  version: "0.6.0"
+  version: "0.7.0"
   python_check_max: "3.14"
 
 recipe:
@@ -11,7 +11,7 @@ recipe:
 
 source:
   url: https://pypi.org/packages/source/c/cross-web/cross_web-${{ version }}.tar.gz
-  sha256: ae90570802615365ca1a781117b43bfd0d6cd3bf611649d24c3a206a82a693c9
+  sha256: 15fbc8b9a824a055db8127fd6e43e0773074f620fdecb6b2b587d3d0a2bdd459
 
 build:
   number: 0
