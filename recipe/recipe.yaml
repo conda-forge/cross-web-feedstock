@@ -2,16 +2,16 @@
 schema_version: 1
 
 context:
-  version: "0.7.0"
-  python_check_max: "3.14"
+  version: "0.7.1"
+  python_check_max: "3.15"
 
 recipe:
   name: cross-web-split
   version: ${{ version }}
 
 source:
-  url: https://pypi.org/packages/source/c/cross-web/cross_web-${{ version }}.tar.gz
-  sha256: 15fbc8b9a824a055db8127fd6e43e0773074f620fdecb6b2b587d3d0a2bdd459
+  url: https://files.pythonhosted.org/packages/source/c/cross-web/cross_web-${{ version }}.tar.gz
+  sha256: 67f871856086da02230785d3d0c26c06c720f947c532ba95aed446a2f0a2ff82
 
 build:
   number: 0
@@ -22,7 +22,7 @@ outputs:
       name: cross-web
     build:
       script:
-        - ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation --disable-pip-version-check
+        - ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation --disable-pip-version-check --check-build-dependencies
     requirements:
       host:
         - hatchling
@@ -48,6 +48,11 @@ outputs:
         - werkzeug >=2.3
         - yarl >=1.9
     tests:
+      - package_contents:
+          strict: true
+          site_packages:
+            - cross_web/**
+            - cross_web-${{ version }}.dist-info/**
       - python:
           imports: cross_web
           pip_check: true
@@ -96,12 +101,10 @@ outputs:
             - pytest-django >=4.11.0
             - python ${{ python_min }}.*
         script:
-          env:
-            PYTEST_ADDOPTS: -vv --tb=long --color=yes -k "not (chalice or quart)"
           content:
             # avoid source path confusion in pyproject.toml
-            - python -c "import pathlib; pathlib.Path('.coveragerc').write_text('[run]\nbranch = true')"
-            - coverage run --source=cross_web -m pytest
+            - python -c "import pathlib; pathlib.Path('.coveragerc').write_text('[run]\nbranch = true\npatch = subprocess')"
+            - coverage run --source=cross_web -m pytest --tb=long --color=yes -vv --tb=long --color=yes -k "not (chalice or quart)" -o asyncio_default_fixture_loop_scope=function
             - coverage report --show-missing --skip-covered --fail-under=85
     about:
       summary: A library for working with web frameworks (with [integrations])
